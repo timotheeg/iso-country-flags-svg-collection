@@ -812,12 +812,11 @@ sub svg2png {
     # is $out older than $in?
 
     if (!-e $out || -M $out > -M $in) {
-		my $cmd = "inkscape -z -e ".$out." -w ".$w." -h ".$h." ".$in;
+		my $cmd = "inkscape ".$in." --export-type=png --export-filename=".$out." --export-width=".$w." --export-height=".$h;
 		if ($h <= 128) {
-			$cmd .= " && convert ".$out." -unsharp 0x1 ".$out;
+			$cmd .= " && magick ".$out." -unsharp 0x1 ".$out;
 		}
-		$cmd .= " && pngcrush -rem allb -brute -reduce ".$out." ".$out.".crushed && mv ".$out.".crushed ".$out;
-		$cmd .= " && optipng -o5 ".$out;
+		$cmd .= " && pngout ".$out;
 		return $cmd;
     } else {
         return undef;
